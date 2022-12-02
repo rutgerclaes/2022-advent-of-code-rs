@@ -1,0 +1,10 @@
+[package]
+name = "utils"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+tracing = { workspace = true }
+ansi_term = { workspace = true }
+thiserror = { workspace = true }
