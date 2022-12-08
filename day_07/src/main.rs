@@ -2,7 +2,11 @@ use anyhow::{anyhow, Result};
 use itertools::Itertools;
 use model::*;
 use tracing::{info, warn};
-use utils::{input::read_lines, output::{output, output_success}, error::ProblemError};
+use utils::{
+    error::ProblemError,
+    input::read_lines,
+    output::{output, output_success},
+};
 
 fn main() {
     let lines: Vec<_> = read_lines("day_07/inputs/puzzle.txt").unwrap();
@@ -11,25 +15,28 @@ fn main() {
     output("part 2", part_two(&root));
 }
 
-fn part_one( root: &FileSystemNode ) -> usize {
-    root
-        .iter()
+fn part_one(root: &FileSystemNode) -> usize {
+    root.iter()
         .filter(|n| n.is_dir() && n.size() < 100000)
         .map(|f| f.size())
         .sum()
 }
 
-fn part_two(root: &FileSystemNode ) -> Result<usize,ProblemError> {
+fn part_two(root: &FileSystemNode) -> Result<usize, ProblemError> {
     let free_space = 70000000 - root.size();
-    info!( "free space is {}", free_space );
+    info!("free space is {}", free_space);
     let cleanup: i64 = 30000000i64 - free_space as i64;
-    info!( "need to cleanup {}", cleanup );
+    info!("need to cleanup {}", cleanup);
 
     if cleanup >= 0 {
-        root.iter().filter( |n| n.is_dir() && n.size() as i64 > cleanup ).map( |d| d.size() ).min().ok_or(  ProblemError::NoSolutionFoundError )
+        root.iter()
+            .filter(|n| n.is_dir() && n.size() as i64 > cleanup)
+            .map(|d| d.size())
+            .min()
+            .ok_or(ProblemError::NoSolutionFoundError)
     } else {
-        warn!( "No cleanup needed" );
-        Ok( 0 )
+        warn!("No cleanup needed");
+        Ok(0)
     }
 }
 

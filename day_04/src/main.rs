@@ -12,16 +12,16 @@ fn main() {
     output("part 2", part_two(&input));
 }
 
-fn part_one( pairs: &[Pair] ) -> Result<usize> {
-    Ok( pairs.iter().filter( |p| p.overlaps_fully() ).count() )
+fn part_one(pairs: &[Pair]) -> Result<usize> {
+    Ok(pairs.iter().filter(|p| p.overlaps_fully()).count())
 }
 
-fn part_two( pairs: &[Pair] ) -> Result<usize> {
-    Ok( pairs.iter().filter( |p| p.overlaps() ).count() )
+fn part_two(pairs: &[Pair]) -> Result<usize> {
+    Ok(pairs.iter().filter(|p| p.overlaps()).count())
 }
 
 mod model {
-    use std::{ops::RangeInclusive, str::FromStr, num::ParseIntError};
+    use std::{num::ParseIntError, ops::RangeInclusive, str::FromStr};
 
     use once_cell::unsync::Lazy;
     use regex::Regex;
@@ -38,7 +38,7 @@ mod model {
 
             overlaps(&self.0, &self.1) || overlaps(&self.1, &self.0)
         }
-        
+
         pub fn overlaps(&self) -> bool {
             fn overlaps(a: &RangeInclusive<u32>, b: &RangeInclusive<u32>) -> bool {
                 b.contains(a.start()) || b.contains(a.end())
@@ -48,15 +48,15 @@ mod model {
         }
     }
 
-    #[derive(Error,Debug)]
+    #[derive(Error, Debug)]
     pub enum PairError {
         #[error("Failed to parse pair: {0}")]
-        ParseError( String )
+        ParseError(String),
     }
 
     impl From<ParseIntError> for PairError {
         fn from(value: ParseIntError) -> Self {
-            PairError::ParseError( format!( "Failed to parse boundary: {}", value ) )
+            PairError::ParseError(format!("Failed to parse boundary: {}", value))
         }
     }
 
@@ -72,10 +72,7 @@ mod model {
                     let first_start = captures
                         .name("first_start")
                         .ok_or_else(|| {
-                            PairError::ParseError(format!(
-                                "first_start not found in '{}'",
-                                s
-                            ))
+                            PairError::ParseError(format!("first_start not found in '{}'", s))
                         })?
                         .as_str()
                         .parse::<u32>()?;
@@ -96,10 +93,7 @@ mod model {
                     let second_end = captures
                         .name("second_end")
                         .ok_or_else(|| {
-                            PairError::ParseError(format!(
-                                "second_end not found in '{}'",
-                                s
-                            ))
+                            PairError::ParseError(format!("second_end not found in '{}'", s))
                         })?
                         .as_str()
                         .parse::<u32>()?;
@@ -139,7 +133,7 @@ mod model {
             let pair = Pair(2..=6, 4..=8);
             assert_eq!(pair.overlaps_fully(), false);
         }
-        
+
         #[test]
         fn test_overlap() {
             let pair = Pair(2..=4, 6..=8);

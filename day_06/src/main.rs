@@ -31,19 +31,21 @@ fn part_two(input: &str) -> Result<usize, ProblemError> {
         .batching(|it| match it.next() {
             Some((position, start)) => {
                 trace!("position: {} start: {}", position, start);
-                let mut window = (1..window_size).filter_map( |_| it.peek().copied() );
-                let result = window.fold_while(hashset![ start ], |seen: HashSet<char>, (_,c)| {
+                let mut window = (1..window_size).filter_map(|_| it.peek().copied());
+                let result = window.fold_while(hashset![start], |seen: HashSet<char>, (_, c)| {
                     if !seen.contains(&c) {
-                        trace!( "    not yet seen {} ({:?})", c, seen );
+                        trace!("    not yet seen {} ({:?})", c, seen);
                         FoldWhile::Continue(seen.update(c))
                     } else {
-                        trace!( "    already seen {} ({:?})", c, seen );
+                        trace!("    already seen {} ({:?})", c, seen);
                         FoldWhile::Done(seen)
                     }
                 });
 
                 match result {
-                    FoldWhile::Continue( seen ) if seen.len() == window_size => Some(Some(position + window_size)),
+                    FoldWhile::Continue(seen) if seen.len() == window_size => {
+                        Some(Some(position + window_size))
+                    }
                     _ => Some(None),
                 }
             }

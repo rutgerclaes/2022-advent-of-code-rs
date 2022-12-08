@@ -165,9 +165,9 @@ mod model {
 
         #[test]
         fn test_score_calculation() {
-            assert_eq!( Move::Paper.score( &Move::Rock ), 8 );
-            assert_eq!( Move::Rock.score( &Move::Paper ), 1 );
-            assert_eq!( Move::Scissors.score( &Move::Scissors ), 6 );
+            assert_eq!(Move::Paper.score(&Move::Rock), 8);
+            assert_eq!(Move::Rock.score(&Move::Paper), 1);
+            assert_eq!(Move::Scissors.score(&Move::Scissors), 6);
         }
     }
 }
@@ -179,13 +179,21 @@ mod test {
 
     #[test]
     fn test_part_one() {
-        let lines = [ String::from("A Y"), String::from("B X"), String::from("C Z") ];
-        assert_eq!( part_one(&lines).unwrap(), 15 );
+        let lines = [
+            String::from("A Y"),
+            String::from("B X"),
+            String::from("C Z"),
+        ];
+        assert_eq!(part_one(&lines).unwrap(), 15);
     }
-    
+
     #[test]
     fn test_part_two() {
-        let lines = [ String::from("A Y"), String::from("B X"), String::from("C Z") ];
-        assert_eq!( part_two(&lines).unwrap(), 12 );
+        let lines = [
+            String::from("A Y"),
+            String::from("B X"),
+            String::from("C Z"),
+        ];
+        assert_eq!(part_two(&lines).unwrap(), 12);
     }
 }

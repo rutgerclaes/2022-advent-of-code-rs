@@ -228,7 +228,6 @@ mod tests {
     use super::*;
     use itertools::Itertools;
 
-
     #[test]
     fn test_part_one() {
         let input = [
@@ -241,9 +240,9 @@ mod tests {
         ];
 
         let rucksacks: Vec<Rucksack> = input.into_iter().map_into().collect();
-        let result = part_one( &rucksacks ).unwrap();
+        let result = part_one(&rucksacks).unwrap();
 
-        assert_eq!( result, 157 )
+        assert_eq!(result, 157)
     }
 
     #[test]
@@ -258,8 +257,8 @@ mod tests {
         ];
 
         let rucksacks: Vec<Rucksack> = input.into_iter().map_into().collect();
-        let result = part_two( &rucksacks ).unwrap();
+        let result = part_two(&rucksacks).unwrap();
 
-        assert_eq!( result, 70 )
+        assert_eq!(result, 70)
     }
 }
