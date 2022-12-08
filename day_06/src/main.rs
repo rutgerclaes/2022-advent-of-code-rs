@@ -31,7 +31,7 @@ fn part_two(input: &str) -> Result<usize, ProblemError> {
         .batching(|it| match it.next() {
             Some((position, start)) => {
                 trace!("position: {} start: {}", position, start);
-                let mut window = (1..window_size).map( |_| it.peek().copied() ).filter_map( |s| s );
+                let mut window = (1..window_size).filter_map( |_| it.peek().copied() );
                 let result = window.fold_while(hashset![ start ], |seen: HashSet<char>, (_,c)| {
                     if !seen.contains(&c) {
                         trace!( "    not yet seen {} ({:?})", c, seen );

@@ -11,4 +11,4 @@ utils = { path = "../utils" }
 itertools = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
-len-trait = "0.6.1"
+len-trait = { workspace = true }
