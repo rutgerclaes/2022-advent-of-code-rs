@@ -9,6 +9,8 @@ use utils::{
 };
 
 fn main() {
+    tracing_subscriber::fmt::init();
+
     let lines: Vec<_> = read_lines("day_07/inputs/puzzle.txt").unwrap();
     let root = parse_lines(&lines).unwrap();
     output_success("part 1", part_one(&root));

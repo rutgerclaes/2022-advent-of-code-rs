@@ -1,9 +1,10 @@
 [workspace]
-members = [ 'utils', 'day_01', 'day_02', 'day_03', 'day_04', 'day_05', 'day_06', 'day_07' ]
+members = [ 'utils', 'day_01', 'day_02', 'day_03', 'day_04', 'day_05', 'day_06', 'day_07',  'day_08', 'day_09', 'day_10', 'day_11' ]
 
 [workspace.dependencies]
 anyhow = "1.0.66"
 tracing = "0.1"
+tracing-test = "0.1"
 tracing-subscriber = "0.3.16"
 ansi_term = "0.12.1"
 thiserror = "1.0.37"
