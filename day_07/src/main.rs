@@ -146,8 +146,7 @@ mod model {
                 Ok(Self::GoDown(name.to_owned()))
             } else {
                 Err(CommandError::ParseError(format!(
-                    "Error parsing {} as command",
-                    s
+                    "Error parsing {s} as command"
                 )))
             }
         }
@@ -281,13 +280,6 @@ mod model {
             }
         }
 
-        // pub fn get( &self, name: &str ) -> Option<&FileSystemNode> {
-        //     match self {
-        //         Self::File { .. } => None,
-        //         Self::Directory { files, .. } => files.get( name ),
-        //     }
-        // }
-
         pub fn insert(&mut self, node: FileSystemNode) {
             match self {
                 Self::File { .. } => panic!("Error inserting node into a file"),
@@ -320,14 +312,14 @@ mod model {
             fn sub_tree(indent: &str, node: &FileSystemNode) -> String {
                 match node {
                     FileSystemNode::File { name, size } => {
-                        format!("{}- {} (file, size={})\n", indent, name, size)
+                        format!("{indent}- {name} (file, size={size})\n")
                     }
                     FileSystemNode::Directory { name, files } => {
                         let next: String = files
                             .values()
                             .map(|node| sub_tree(&(String::from(indent) + "  "), node))
                             .collect();
-                        format!("{}- {} (dir)\n{}", indent, name, next)
+                        format!("{indent}- {name} (dir)\n{next}")
                     }
                 }
             }

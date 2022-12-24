@@ -56,7 +56,7 @@ mod model {
 
     impl From<ParseIntError> for PairError {
         fn from(value: ParseIntError) -> Self {
-            PairError::ParseError(format!("Failed to parse boundary: {}", value))
+            PairError::ParseError(format!("Failed to parse boundary: {value}"))
         }
     }
 
@@ -72,28 +72,28 @@ mod model {
                     let first_start = captures
                         .name("first_start")
                         .ok_or_else(|| {
-                            PairError::ParseError(format!("first_start not found in '{}'", s))
+                            PairError::ParseError(format!("first_start not found in '{s}'"))
                         })?
                         .as_str()
                         .parse::<u32>()?;
                     let first_end = captures
                         .name("first_end")
                         .ok_or_else(|| {
-                            PairError::ParseError(format!("first_end not found in '{}'", s))
+                            PairError::ParseError(format!("first_end not found in '{s}'"))
                         })?
                         .as_str()
                         .parse::<u32>()?;
                     let second_start = captures
                         .name("second_start")
                         .ok_or_else(|| {
-                            PairError::ParseError(format!("first_end not found in '{}'", s))
+                            PairError::ParseError(format!("first_end not found in '{s}'"))
                         })?
                         .as_str()
                         .parse::<u32>()?;
                     let second_end = captures
                         .name("second_end")
                         .ok_or_else(|| {
-                            PairError::ParseError(format!("second_end not found in '{}'", s))
+                            PairError::ParseError(format!("second_end not found in '{s}'"))
                         })?
                         .as_str()
                         .parse::<u32>()?;
@@ -101,8 +101,7 @@ mod model {
                     Ok(Pair(first_start..=first_end, second_start..=second_end))
                 }
                 None => Err(PairError::ParseError(format!(
-                    "Failed to parse input line {}",
-                    s
+                    "Failed to parse input line {s}"
                 ))),
             }
         }

@@ -1,0 +1,16 @@
+[package]
+name = "day_16"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+im = { workspace = true }
+itertools = { workspace = true }
+utils = { path = "../utils" }
+regex = { workspace = true }
+once_cell = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+rayon = "1.6.1"

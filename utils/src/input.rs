@@ -10,7 +10,7 @@ where
 {
     let _guard = debug_span!("input::parse_lines", path = path).entered();
     let file =
-        File::open(path).context(format!("Could not open input file '{}' for reading", path))?;
+        File::open(path).context(format!("Could not open input file '{path}' for reading"))?;
     let reader = BufReader::new(file);
 
     reader
@@ -18,10 +18,9 @@ where
         .enumerate()
         .map(|(i, line)| -> Result<T> {
             let string_value = line?;
-            let value = string_value.parse().context(format!(
-                "Could not parse input line {}: '{}'",
-                i, string_value
-            ))?;
+            let value = string_value
+                .parse()
+                .context(format!("Could not parse input line {i}: '{string_value}'"))?;
             Ok(value)
         })
         .try_collect()
@@ -30,7 +29,7 @@ where
 pub fn read_file(path: &str) -> Result<String> {
     let _guard = debug_span!("input::read_file", path = path).entered();
     let file_content = std::fs::read_to_string(path)
-        .context(format!("Could not open input file '{}' for reading", path))?;
+        .context(format!("Could not open input file '{path}' for reading"))?;
     Ok(file_content)
 }
 
@@ -40,7 +39,7 @@ where
 {
     let _guard = debug_span!("input::read_lines", path = path).entered();
     let file =
-        File::open(path).context(format!("Could not open input file '{}' for reading", path))?;
+        File::open(path).context(format!("Could not open input file '{path}' for reading"))?;
     let reader = BufReader::new(file);
 
     let result: I = reader.lines().try_collect()?;
@@ -55,6 +54,6 @@ where
     let _guard = debug_span!("input::parse_file", path = path).entered();
     let result = read_file(path)?
         .parse::<T>()
-        .context(format!("Could not parse the input file '{}'", path))?;
+        .context(format!("Could not parse the input file '{path}'"))?;
     Ok(result)
 }

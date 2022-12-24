@@ -62,23 +62,22 @@ fn part_two(moves: &[Move]) -> usize {
     positions.len()
 }
 
-fn calculate_tail_position(head: &Point<i32>, tail: Point<i32>) -> Point<i32> {
+fn calculate_tail_position(head: &Point<i64>, tail: Point<i64>) -> Point<i64> {
     if head.x.abs_diff(tail.x) <= 1 && head.y.abs_diff(tail.y) <= 1 {
-        debug!("H {} touches T {}: not moving", head, tail);
+        debug!("H {head} touches T {tail}: not moving");
         tail
     } else {
-        debug!("H {} no longer toches T {}", head, tail);
+        debug!("H {head} no longer toches T {tail}");
         let diff_x = head.x - tail.x;
         let diff_y = head.y - tail.y;
 
-        debug!("diff_x: {}\tdiff_y: {}", diff_x, diff_y);
+        debug!("diff_x: {diff_x}\tdiff_y: {diff_y}");
         Point::new(tail.x + diff_x.signum(), tail.y + diff_y.signum())
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use im::Vector;
     use itertools::Itertools;
     use tracing_test::traced_test;
     use utils::{geom::Point, input::parse_lines};
@@ -187,15 +186,13 @@ mod model {
                     "U" => Ok(Direction::Up),
                     "D" => Ok(Direction::Down),
                     val => Err(ProblemError::InputParseError(format!(
-                        "Could not parse direction '{}'",
-                        val
+                        "Could not parse direction '{val}'"
                     ))),
                 }?;
 
                 let distance = dist.parse().map_err(|err| {
                     ProblemError::InputParseError(format!(
-                        "Could not parse distance '{}': {}",
-                        dist, err
+                        "Could not parse distance '{dist}': {err}"
                     ))
                 })?;
 
@@ -205,8 +202,7 @@ mod model {
                 })
             } else {
                 Err(ProblemError::InputParseError(format!(
-                    "Could not parse line '{}'",
-                    s
+                    "Could not parse line '{s}'"
                 )))
             }
         }

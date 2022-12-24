@@ -106,7 +106,7 @@ mod model {
         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
             match self {
                 Self::NoOp => write!(f, "noop"),
-                Self::Add(val) => write!(f, "addx {}", val),
+                Self::Add(val) => write!(f, "addx {val}"),
             }
         }
     }
@@ -120,20 +120,17 @@ mod model {
                 add if s.starts_with("addx") => s
                     .strip_prefix("addx ")
                     .ok_or(ProblemError::InputParseError(format!(
-                        "Could not parse add instruction {} ",
-                        add
+                        "Could not parse add instruction {add} "
                     )))
                     .and_then(|s| {
                         s.parse().map(Self::Add).map_err(|err| {
                             ProblemError::InputParseError(format!(
-                                "Could not parse value for add: {}",
-                                err
+                                "Could not parse value for add: {err}"
                             ))
                         })
                     }),
                 other => Err(ProblemError::InputParseError(format!(
-                    "Could not parse instruction at {}",
-                    other
+                    "Could not parse instruction at {other}"
                 ))),
             }
         }

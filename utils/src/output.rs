@@ -9,8 +9,8 @@ where
     if event_enabled!(Level::INFO) {
         event!(Level::INFO, "Solution to {}: {}", part, result)
     } else {
-        let formatted_result = Style::new().bold().paint(format!("{}", result));
-        println!("Solution to {}: {}", part, formatted_result);
+        let formatted_result = Style::new().bold().paint(format!("{result}"));
+        println!("Solution to {part}: {formatted_result}");
     }
 }
 
@@ -31,10 +31,7 @@ where
         }
         Err(error) => {
             let formatted_part = Color::Red.bold().paint(part);
-            eprintln!(
-                "Failed to compute solution to {}: {}",
-                formatted_part, error
-            )
+            eprintln!("Failed to compute solution to {formatted_part}: {error}")
         }
     }
 }
@@ -48,8 +45,7 @@ where
     (y_start..y_end).for_each(|y| {
         (x_start..x_end).for_each(|x| {
             let output = f(&x, &y);
-            let out = format!("{}", output);
-            print!("{}", out)
+            print!("{output}")
         });
         println!();
     })

@@ -170,8 +170,7 @@ mod model {
                 Some('*') => Ok('*'),
                 Some('+') => Ok('+'),
                 Some(c) => Err(ProblemError::InputParseError(format!(
-                    "Could not parse operation with operand '{}'",
-                    c
+                    "Could not parse operation with operand '{c}'"
                 ))),
                 None => Err(ProblemError::InputParseError(
                     "Could not find operand".to_owned(),
@@ -193,7 +192,7 @@ mod model {
                 f,
                 "{} {}",
                 self.operand,
-                self.rhs.map_or("old".to_owned(), |n| format!("{}", n))
+                self.rhs.map_or("old".to_owned(), |n| format!("{n}"))
             )
         }
     }
@@ -230,8 +229,7 @@ mod model {
                             .map(|e| {
                                 e.parse().map_err(|err| {
                                     ProblemError::InputParseError(format!(
-                                        "Could not parse starting item '{}': {}",
-                                        e, err
+                                        "Could not parse starting item '{e}': {err}"
                                     ))
                                 })
                             })
@@ -257,8 +255,7 @@ mod model {
                     .and_then(|s| {
                         s.parse().map_err(|err| {
                             ProblemError::InputParseError(format!(
-                                "Could not parse test divisor: {}",
-                                err
+                                "Could not parse test divisor: {err}"
                             ))
                         })
                     })?;
@@ -274,8 +271,7 @@ mod model {
                     .and_then(|s| {
                         s.parse().map_err(|err| {
                             ProblemError::InputParseError(format!(
-                                "Could not parse 'if true' destination: {}",
-                                err
+                                "Could not parse 'if true' destination: {err}"
                             ))
                         })
                     })?;
@@ -291,8 +287,7 @@ mod model {
                     .and_then(|s| {
                         s.parse().map_err(|err| {
                             ProblemError::InputParseError(format!(
-                                "Could not parse 'if false' destination: {}",
-                                err
+                                "Could not parse 'if false' destination: {err}"
                             ))
                         })
                     })?;
@@ -312,7 +307,7 @@ mod model {
                 .batching(|it| {
                     if let Some(header) = it.find(|s| !s.is_empty()) {
                         trace!("Starting to parse '{}'", header);
-                        Some(parse_monkey(it).context(format!("While parsing {}", header)))
+                        Some(parse_monkey(it).context(format!("While parsing {header}")))
                     } else {
                         None
                     }

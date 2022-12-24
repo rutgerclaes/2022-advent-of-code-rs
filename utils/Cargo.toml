@@ -8,4 +8,6 @@ anyhow = { workspace = true }
 tracing = { workspace = true }
 ansi_term = { workspace = true }
 thiserror = { workspace = true }
+itertools = { workspace = true }
+im = { workspace = true }
 num = "0.4.0"

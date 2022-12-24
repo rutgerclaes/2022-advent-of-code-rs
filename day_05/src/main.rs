@@ -123,7 +123,7 @@ mod model {
 
     impl From<ParseIntError> for MoveError {
         fn from(value: ParseIntError) -> Self {
-            MoveError::ParseError(format!("Failed to parse int in move: {}", value))
+            MoveError::ParseError(format!("Failed to parse int in move: {value}"))
         }
     }
 
@@ -157,12 +157,9 @@ mod model {
                 Some(captures) => captures
                     .name("id")
                     .and_then(|c| c.as_str().chars().next())
-                    .ok_or_else(|| CrateError::ParseError(format!("Id not found in '{}'", s)))
+                    .ok_or_else(|| CrateError::ParseError(format!("Id not found in '{s}'")))
                     .map(Crate),
-                None => Err(CrateError::ParseError(format!(
-                    "Regex did not match '{}'",
-                    s
-                ))),
+                None => Err(CrateError::ParseError(format!("Regex did not match '{s}'"))),
             }
         }
     }
@@ -211,8 +208,7 @@ mod model {
                         .name("amount")
                         .ok_or_else(|| {
                             MoveError::ParseError(format!(
-                                "Could not get amount from {}: {:?}",
-                                s, captures
+                                "Could not get amount from {s}: {captures:?}",
                             ))
                         })?
                         .as_str()
@@ -221,8 +217,7 @@ mod model {
                         .name("source")
                         .ok_or_else(|| {
                             MoveError::ParseError(format!(
-                                "Could not get source from {}: {:?}",
-                                s, captures
+                                "Could not get source from {s}: {captures:?}"
                             ))
                         })?
                         .as_str()
@@ -231,8 +226,7 @@ mod model {
                         .name("destination")
                         .ok_or_else(|| {
                             MoveError::ParseError(format!(
-                                "Could not get destination from {}: {:?}",
-                                s, captures
+                                "Could not get destination from {s}: {captures:?}"
                             ))
                         })?
                         .as_str()
@@ -243,10 +237,7 @@ mod model {
                         destination,
                     })
                 }
-                None => Err(MoveError::ParseError(format!(
-                    "Regex did not match '{}'",
-                    s
-                ))),
+                None => Err(MoveError::ParseError(format!("Regex did not match '{s}'"))),
             }
         }
     }
@@ -267,26 +258,21 @@ mod model {
 
         pub fn move_crate(&mut self, source: usize, destination: usize) -> Result<(), MoveError> {
             let source_stack = self.stacks.get_mut(&(source - 1)).ok_or_else(|| {
-                MoveError::InvalidMoveError(format!(
-                    "Cannot select stack {} as source stack",
-                    source
-                ))
+                MoveError::InvalidMoveError(format!("Cannot select stack {source} as source stack"))
             })?;
 
             if let Some(crte) = source_stack.pick() {
                 let destination_stack =
                     self.stacks.get_mut(&(destination - 1)).ok_or_else(|| {
                         MoveError::InvalidMoveError(format!(
-                            "Cannot select stack {} as destination stack",
-                            destination
+                            "Cannot select stack {destination} as destination stack"
                         ))
                     })?;
                 destination_stack.drop(crte);
                 Ok(())
             } else {
                 Err(MoveError::InvalidMoveError(format!(
-                    "Could not pick item from stack {}",
-                    source
+                    "Could not pick item from stack {source}"
                 )))
             }
         }
@@ -313,7 +299,7 @@ mod model {
         pub fn apply(&mut self, mve: &Move) -> Result<()> {
             for i in 0..(mve.amount) {
                 self.move_crate(mve.source, mve.destination)
-                    .context(format!("While performing move {}: {}", i, mve))?;
+                    .context(format!("While performing move {i}: {mve}"))?;
             }
 
             Ok(())
@@ -374,8 +360,7 @@ mod model {
                 Ok(self.0.split_off(self.0.len() - amount))
             } else {
                 Err(MoveError::InvalidMoveError(format!(
-                    "Insufficient crates to pick {} crates",
-                    amount
+                    "Insufficient crates to pick {amount} crates"
                 )))
             }
         }

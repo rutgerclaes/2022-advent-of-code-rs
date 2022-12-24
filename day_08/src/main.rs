@@ -3,9 +3,14 @@
 use anyhow::Result;
 use im::Vector;
 use itertools::Itertools;
-use model::{CompleteGrid, GridError, Tree};
+use model::Tree;
 use tracing::{debug, trace};
-use utils::{error::ProblemError, geom::Point, input::read_lines, output::output};
+use utils::{
+    error::ProblemError,
+    geom::{CompleteGrid, GridError, Point},
+    input::read_lines,
+    output::output,
+};
 
 fn main() {
     tracing_subscriber::fmt::init();
@@ -172,12 +177,8 @@ mod tests {
 }
 
 mod model {
-    use im::Vector;
-    use itertools::Itertools;
     use std::fmt::Display;
-    use thiserror::Error;
     use utils::error::ProblemError;
-    use utils::geom::{BBox, Point};
 
     #[derive(Copy, Clone, Debug, Eq, PartialEq)]
     pub struct Tree {
@@ -199,8 +200,7 @@ mod model {
                 .map(|i| Tree::new(i as u8))
                 .ok_or_else(|| {
                     ProblemError::InputParseError(format!(
-                        "Could not parse '{}' into Tree height, only integers are supported",
-                        value
+                        "Could not parse '{value}' into Tree height, only integers are supported"
                     ))
                 })
         }
@@ -209,113 +209,6 @@ mod model {
     impl Tree {
         pub fn new(height: u8) -> Tree {
             Tree { height }
-        }
-    }
-
-    pub struct CompleteGrid<C>(Vector<Vector<C>>);
-
-    #[derive(Debug, Error)]
-    pub enum GridError {
-        #[error("Irregular grid")]
-        IrregularGrid,
-    }
-
-    impl<C> CompleteGrid<C>
-    where
-        C: Copy,
-    {
-        pub fn build(elements: Vector<Vector<C>>) -> Result<CompleteGrid<C>, GridError> {
-            let regular = elements
-                .iter()
-                .tuple_windows()
-                .all(|(a, b)| a.len() == b.len());
-            if regular {
-                Ok(CompleteGrid(elements))
-            } else {
-                Err(GridError::IrregularGrid)
-            }
-        }
-
-        #[allow(dead_code)]
-        pub fn get(&self, point: &Point<usize>) -> Option<&C> {
-            self.0.get(point.y).and_then(|row| row.get(point.x))
-        }
-
-        pub fn row(&self, y: usize) -> Option<&Vector<C>> {
-            self.0.get(y)
-        }
-
-        pub fn width(&self) -> usize {
-            self.0.head().map(|r| r.len()).unwrap_or(0)
-        }
-
-        #[allow(dead_code)]
-        pub fn height(&self) -> usize {
-            self.0.len()
-        }
-
-        pub fn col(&self, x: usize) -> Option<Vector<&C>> {
-            if x >= self.width() {
-                None
-            } else {
-                let col: Vector<&C> = self.0.iter().map(|r| r.get(x).unwrap()).collect();
-                Some(col)
-            }
-        }
-
-        #[allow(dead_code)]
-        pub fn bbox(&self) -> Option<BBox<usize>> {
-            if self.height() >= 1 && self.width() >= 1 {
-                Some(BBox::new(0, 0, self.width() - 1, self.height() - 1))
-            } else {
-                None
-            }
-        }
-
-        pub fn iter(&self) -> impl Iterator<Item = (Point<usize>, &C)> {
-            self.0.iter().enumerate().flat_map(move |(y, row)| {
-                row.iter()
-                    .enumerate()
-                    .map(move |(x, elem)| (Point::new(x, y), elem))
-            })
-        }
-
-        #[allow(dead_code)]
-        pub fn map<F, O>(&self, f: F) -> CompleteGrid<O>
-        where
-            F: Fn(Point<usize>, &C) -> O,
-            O: Clone,
-        {
-            let values: Vector<Vector<O>> = self
-                .0
-                .iter()
-                .enumerate()
-                .map(move |(y, row)| {
-                    let new_row: Vector<O> = row
-                        .iter()
-                        .enumerate()
-                        .map(|(x, elem)| {
-                            let point = Point::new(x, y);
-                            f(point, elem)
-                        })
-                        .collect();
-
-                    new_row
-                })
-                .collect();
-
-            CompleteGrid(values)
-        }
-    }
-
-    impl<C> TryFrom<Vector<Vector<C>>> for CompleteGrid<C>
-    where
-        C: Copy,
-    {
-        type Error = GridError;
-
-        fn try_from(value: Vector<Vector<C>>) -> Result<Self, Self::Error> {
-            CompleteGrid::build(value)
         }
     }
 }

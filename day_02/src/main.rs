@@ -74,31 +74,28 @@ where
 
     match regex.captures(line) {
         None => Err(ProblemError::InputParseError(format!(
-            "Error parsing {}",
-            line
+            "Error parsing {line}"
         ))),
         Some(captures) => {
             let other = captures
                 .name("other")
-                .ok_or_else(|| {
-                    ProblemError::InputParseError(format!("No other found in {}", line))
-                })?
+                .ok_or_else(|| ProblemError::InputParseError(format!("No other found in {line}")))?
                 .as_str()
                 .chars()
                 .next()
                 .unwrap();
             let other = first_mapper(other)
-                .ok_or_else(|| ProblemError::InputParseError(format!("Unknown code: {}", other)))?;
+                .ok_or_else(|| ProblemError::InputParseError(format!("Unknown code: {other}")))?;
 
             let own = captures
                 .name("self")
-                .ok_or_else(|| ProblemError::InputParseError(format!("No self found in {}", line)))?
+                .ok_or_else(|| ProblemError::InputParseError(format!("No self found in {line}")))?
                 .as_str()
                 .chars()
                 .next()
                 .unwrap();
             let own = second_mapper(own, &other)
-                .ok_or_else(|| ProblemError::InputParseError(format!("Unknown code: {}", own)))?;
+                .ok_or_else(|| ProblemError::InputParseError(format!("Unknown code: {own}")))?;
 
             Ok((other, own))
         }
